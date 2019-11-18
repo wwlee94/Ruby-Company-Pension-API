@@ -53,6 +53,8 @@ module PensionAPI
       }
     end
 
+    info["items"] = info["items"].sort_by{|index| index[:date]}.reverse
+
     return info
   end
 
