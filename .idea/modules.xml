@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../../Opentutorials_Ruby/.idea/Opentutorials_Ruby.iml" filepath="$PROJECT_DIR$/../../Opentutorials_Ruby/.idea/Opentutorials_Ruby.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Ruby-Opentutorials/.idea/Opentutorials_Ruby.iml" filepath="$PROJECT_DIR$/../../Ruby-Opentutorials/.idea/Opentutorials_Ruby.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Rails-Tutorials/.idea/Rails-Tutorials.iml" filepath="$PROJECT_DIR$/../../Rails-Tutorials/.idea/Rails-Tutorials.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Ruby-Company-Pension-API.iml" filepath="$PROJECT_DIR$/.idea/Ruby-Company-Pension-API.iml" />
     </modules>
   </component>

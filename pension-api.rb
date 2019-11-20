@@ -1,4 +1,3 @@
-# Ruby 샘플 코드 #
 require 'rubygems'
 require 'rest-client'
 require 'nokogiri'
@@ -18,18 +17,14 @@ module PensionAPI
             'ServiceKey' => api_key,
             'wkpl_nm' => company_name,
             'bzowr_rgst_no' => parse_registration_number(registration_number),
-            'pageNo' => '1'
+            'pageNo' => '1',
+            'numOfRows' => '100'
         }
     }
-    if recent
-      headers[:params]["numOfRows"] = '1' # 최신 정보만
-    else
-      headers[:params]["numOfRows"] = '10'
-    end
 
     begin
       response = RestClient.get(url, headers)
-    rescue Exception
+    rescue StandardError
       puts("PensionAPI Error : 회사 식별변호를 가져올 수 없습니다.")
     end
 
@@ -55,7 +50,16 @@ module PensionAPI
 
     info["items"] = info["items"].sort_by{|index| index[:date]}.reverse
 
-    return info
+    if recent
+      current = info["items"][0]
+      info = {
+        'items' => []
+      }
+      info['items'] << current
+      return info
+    else
+      return info
+    end
   end
 
   def PensionAPI::get_detailed_info(index)
@@ -71,7 +75,7 @@ module PensionAPI
 
     begin
       response = RestClient.get(url, headers)
-    rescue Exception
+    rescue StandardError
       puts("PensionAPI Error : 회사 세부 정보를 가져올 수 없습니다.")
     end
 
