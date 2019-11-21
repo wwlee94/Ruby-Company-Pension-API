@@ -76,22 +76,38 @@ class PensionApi
       end
 
       item = Nokogiri::XML(response).search('item')[0]
-
+      employee_count = item.at('jnngpCnt').text.to_i
+      paid_pension = item.at('crrmmNtcAmt').text.to_i
       {
         company: index[:company],
         date: index[:date],
-        employee_count: item.at('jnngpCnt').text.to_i,
-        paid_pension: item.at('crrmmNtcAmt').text.to_i
+        employee_count: employee_count,
+        paid_pension: paid_pension,
+        pension_per_employee: (paid_pension / employee_count / 2).to_i
       }
     end
 
     # (회사 이름, 데이터 생성일, 직원수, 회사 총 연금, 직원 1인 평균 연금)
     def get_company_info(company_name, registration_number, recent = true)
       index = get_history_index(company_name, registration_number, recent)
+      # if index.include?('exception_msg')
+      #   return {
+      #     'statusCode' => 400,
+      #     'exception_msg' => index[:exception_msg],
+      #     'message' => '정보를 조회할 수 없습니다.'
+      #   }
+      # end
 
       result = []
       index[:items].each do |info|
         detail_info = get_detailed_info(info)
+        # if index.include?('exception_msg')
+        #   return {
+        #     'statusCode' => 400,
+        #     'exception_msg' => index[:exception_msg],
+        #     'message' => '정보를 조회할 수 없습니다.'
+        #   }
+        # end
         result.push(detail_info)
       end
 
