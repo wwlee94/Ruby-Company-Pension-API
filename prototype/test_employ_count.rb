@@ -1,4 +1,4 @@
-require './pension_api_class_prototype'
+require './pension_api_class_version'
 require 'json'
 
 # 최근 10개 정보의 직원 수 리스트
