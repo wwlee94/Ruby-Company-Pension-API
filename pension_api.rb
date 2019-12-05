@@ -82,6 +82,8 @@ class PensionApi
     def get_company_info(company)
       name = company.registration_name || company.name
 
+      raise Exceptions::InvalidRegistrationNumberError, '사업자등록번호를 정확히 입력해주세요.' if company.registration_number.nil?
+
       company_history_infos = get_history_infos(name, company.registration_number)
       raise Exceptions::NotFoundError, '조회 결과가 없습니다. 사업자등록번호나 사업자등록상호명을 확인해주세요.' if company_history_infos.first.nil?
 
