@@ -1,0 +1,63 @@
+<% # company, job_position, job_position_category_name %>
+<section class="section-summary">
+  <h5 class="section-title">요약</h5>
+
+  <table class="table table-information">
+    <tbody>
+    <% if job_position_category_name.present? %>
+      <tr>
+        <td class="t-icon"><%= svg('ic-job-16', '') %></td>
+        <td class="t-label">직무</td>
+        <td class="t-content"><%= job_position_category_name.join(', ') %></td>
+      </tr>
+    <% end %>
+
+    <tr>
+      <td class="t-icon"><%= svg('ic-laptop-16', '') %></td>
+      <td class="t-label">경력</td>
+      <td class="t-content"><%= job_position_career(job_position) %></td>
+    </tr>
+
+    <% if company_info.present?
+         employees = company_info.employees_count.to_s + '명' %>
+    <% elsif company.employees.present?
+         employees = company.employees %>
+    <% end %>
+    <% if employees.present? %>
+      <tr>
+        <td class="t-icon"><%= svg('ic-organization-16', '') %></td>
+        <td class="t-label">회사 규모</td>
+        <td class="t-content"><%= employees %></td>
+      </tr>
+    <% end %>
+
+    <% if company.service_name.present? %>
+      <tr>
+      <td class="t-icon"><%= svg('ic-star-boxed-16', '') %></td>
+      <td class="t-label">주요 서비스</td>
+      <td class="t-content">
+        <% if company.service_url.present? %>
+          <%= link_to company.service_name, company.service_url, target: '_blank' %>
+        <% else %>
+          <%= company.service_name %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+
+    <tr>
+      <td class="t-icon"><%= svg('ic-expired-16', '') %></td>
+      <td class="t-label">기간</td>
+      <td class="t-content"><%= job_position_period(job_position) %></td>
+    </tr>
+
+    <% if company.address.present? %>
+      <tr>
+        <td class="t-icon"><%= svg('ic-location-16', '') %></td>
+        <td class="t-label">위치</td>
+        <td class="t-content"><%= company.address %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</section>
