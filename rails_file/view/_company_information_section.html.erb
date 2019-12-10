@@ -1,0 +1,75 @@
+<% # locals { company } %>
+<section>
+  <h5 class="section-title">회사 정보</h5>
+  <a href="<%= company_path(company) %>" class="card-company">
+    <%= image_tag company_logo_url(company), class: 'company-logo', alt: '기업이미지' %>
+    <h5 class="company-name">
+      <%= company.name %>
+      <% if company.service_name.present? %><br> <span><%= company.service_name %></span>
+      <% end %>
+    </h5>
+    <%= svg('ic-keyboard-arrow-right', 'ic-24') %>
+  </a>
+  <ul class="list-status">
+    <% if company.home_url.present? %>
+      <li>
+        <h6 class="list-label">
+          <%= svg('ic-language-14', 'ic-14') %>
+          회사 홈페이지
+        </h6>
+        <h6 class="list-value">
+          <%= link_to '바로가기', link_url_with_protocol(company.home_url), target: '_blank' %>
+        </h6>
+      </li>
+    <% end %>
+    <% if company_info.present?
+         employees = company_info.employees_count.to_s + '명'%>
+    <% elsif company.employees.present?
+         employees = company.employees %>
+    <% end %>
+    <% if employees.present? %>
+      <li>
+        <h6 class="list-label">
+          <%= svg('ic-member-14', 'ic-14') %>
+          사원수
+        </h6>
+        <h6 class="list-value"><%= employees %></h6>
+      </li>
+    <% end %>
+    <% if false %>
+      <li>
+        <h6 class="list-label">
+          <%= svg('ic-money-14', 'ic-14') %>
+          연봉
+        </h6>
+        <h6 class="list-value">
+          <a href="https://kreditjob.com/company/d061862cfe7508db1d820a5766074aa7d2b7ee27" target="_blank"> 보기
+            <%= svg('ic-keyboard-arrow-right', 'ic-24') %>
+          </a>
+        </h6>
+      </li>
+    <% end %>
+    <% if company.funding.present? %>
+      <li>
+        <h6 class="list-label">
+          <%= svg('ic-fund-14', 'ic-14') %>
+          투자
+        </h6>
+        <h6 class="list-value">
+          <%= company.funding %>억
+        </h6>
+      </li>
+    <% end %>
+    <% if company.revenue.present? %>
+      <li>
+        <h6 class="list-label">
+          <%= svg('ic-fund-14', 'ic-14') %>
+          매출
+        </h6>
+        <h6 class="list-value">
+          <%= company.revenue %>억
+        </h6>
+      </li>
+    <% end %>
+  </ul>
+</section>
