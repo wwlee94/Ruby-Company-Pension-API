@@ -7,11 +7,13 @@ class CreateCompanyInfoJob < ApplicationJob
 
     company_infos = PensionApi.get_company_info(company)
 
-    return unless company_infos
+    return if company_infos.blank?
 
     if using_latest_data
       create_company_infos_by! company, company_infos[0]
     else
+      registered_at_list = company.company_infos.select(:registered_at).map(&:registered_at)
+      company_infos.select! { |item| Time.zone.strptime(item[:date], '%Y%m') >= 2.years.ago(Time.current) && !registered_at_list.include?(Time.zone.strptime(item[:date], '%Y%m')) }
       company_infos.each do |company_info|
         create_company_infos_by! company, company_info
       end
@@ -27,11 +29,6 @@ class CreateCompanyInfoJob < ApplicationJob
     registered_at = Time.zone.strptime(company_info[:date], '%Y%m')
     company.company_infos.create!(registered_at: registered_at, employees_count: company_info[:employees_count], total_paid_pension: company_info[:total_paid_pension])
 
-  rescue ActiveRecord::RecordInvalid => e
-    Rollbar.error(e)
-    Rails.logger.error(e)
-    Rails.logger.error(company_info[:company] + ' 기업의 ' + company_info[:date] + ' 일자 데이터는 이미 저장되어 있습니다.')
-    nil
   rescue StandardError => e
     Rollbar.error(e)
     Rails.logger.error(e)
