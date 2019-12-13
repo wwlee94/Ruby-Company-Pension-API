@@ -13,12 +13,11 @@ class CreateCompanyInfoJob < ApplicationJob
       create_company_infos_by! company, company_infos[0]
     else
       registered_at_list = company.company_infos.select(:registered_at).map(&:registered_at)
-      company_infos.select! { |item| Time.zone.strptime(item[:date], '%Y%m') >= 2.years.ago(Time.current) && !registered_at_list.include?(Time.zone.strptime(item[:date], '%Y%m')) }
+      company_infos.select! { |company_info| Time.zone.strptime(company_info[:date], '%Y%m') >= Time.current.ago(2.years) && !registered_at_list.include?(Time.zone.strptime(company_info[:date], '%Y%m')) }
       company_infos.each do |company_info|
         create_company_infos_by! company, company_info
       end
     end
-
   rescue HeraExceptions::Base => e
     Rollbar.error(e)
     Rails.logger.error(e)
@@ -28,7 +27,6 @@ class CreateCompanyInfoJob < ApplicationJob
   def create_company_infos_by!(company, company_info)
     registered_at = Time.zone.strptime(company_info[:date], '%Y%m')
     company.company_infos.create!(registered_at: registered_at, employees_count: company_info[:employees_count], total_paid_pension: company_info[:total_paid_pension])
-
   rescue StandardError => e
     Rollbar.error(e)
     Rails.logger.error(e)
